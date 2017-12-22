@@ -1,0 +1,8 @@
+1.Install NodeJs - https://nodejs.org/uk/
+3.Install MySql - https://dev.mysql.com/doc/refman/5.7/en/mysql-installer.html
+4.Create database + table with items
+5.Project packeges - npm install
+***********************************************************************************
+			Project part
+1.Configure privious database connection (routes/connection.js)
+2.Config client table fields(with new dabases)

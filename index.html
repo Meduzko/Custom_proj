@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRUD Table</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/bootstrap-table/src/bootstrap-table.css">
+    <link rel="stylesheet" href="./assets/examples.css">
+    <style>
+        .update {
+            color: #333;
+            margin-right: 5px;
+        }
+        .remove {
+            color: red;
+            margin-left: 5px;
+        }
+        .alert {
+            padding: 0 14px;
+            margin-bottom: 0;
+            display: inline-block;
+        }
+    </style>
+    <script src="./assets/jquery.min.js"></script>
+    <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./assets/bootstrap-table/src/bootstrap-table.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!--data-toolbar=".toolbar" -->
+        <div id="toolbar" class="form-inline">
+            <!--
+            <input id="page" class="form-control" style="width: 60px" type="number" value="1" min="1" max="3">
+            <button id="button" class="btn btn-default">selectPage</button>
+            <button id="button2" class="btn btn-default">prevPage</button>
+            <button id="button3" class="btn btn-default">nextPage</button>
+        -->
+        <p class="toolbar">
+            <a class="create btn btn-default" href="javascript:">Create Item</a>
+            <span class="alert"></span>
+        </p>
+        </div>
+        <table id="table"
+                data-toggle="table"
+                data-toolbar="#toolbar"
+                data-height="650"
+                data-pagination="true"
+                data-show-refresh="true"
+                data-show-columns="true"
+                data-search="true"
+                data-query-params="queryParams"
+                data-detail-view="true"
+                data-detail-formatter="detailFormatter"
+                data-url="http://localhost:3000/customer">
+            <thead>
+            <tr>
+                <th data-field="actor_id">id</th>
+                <th data-field="first_name">first name</th>
+                <th data-field="last_name">last name</th>
+               <th data-field="last_update">last update</th>
+                <th data-field="action"
+                    data-align="center"
+                    data-formatter="actionFormatter"
+                    data-events="actionEvents">Action</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div id="modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Id</label>
+                        <input type="number" class="form-control" name="actor_id" placeholder="actor_id" id="actor_id">
+                    </div>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="first_name" placeholder="first_name" id="first_name">
+                    </div>
+                    <div class="form-group">
+                        <label>last name</label>
+                        <input type="text" class="form-control" name="last_name" placeholder="last_name" id="last_name">
+                    </div>
+                    <div class="form-group">
+                        <label>last_update</label>
+                        <input type="date" class="form-control" name="last_update" placeholder="last_update" id="last_update">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit">Submit</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+
+        <div id="modal_2" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Id</label>
+                        <input type="number" class="form-control" name="actor_id" placeholder="actor_id" id="actor_id">
+                    </div>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="first_name" placeholder="first_name" id="first_name">
+                    </div>
+                    <div class="form-group">
+                        <label>last name</label>
+                        <input type="text" class="form-control" name="last_name" placeholder="last_name" id="last_name">
+                    </div>
+                    <div class="form-group">
+                        <label>last_update</label>
+                        <input type="date" class="form-control" name="last_update" placeholder="last_update" id="last_update">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit">Update</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+<script>
+
+	(function(){
+		var $table = $('#table');
+		var items = {};
+		$.ajax({
+		   method: "GET",
+		   url: "http://localhost:3000/customer"
+		})
+		 .done(function( data ) {
+		 	items = data;
+		    console.log(items);
+		    //items = JSON.stringify(data);
+		    
+		});
+
+        $table.bootstrapTable({data: items});
+	})();
+
+
+
+
+
+//padgination
+    var $table = $('#table'),
+        $page = $('#page'),
+        $button = $('#button'),
+        $button2 = $('#button2'),
+        $button3 = $('#button3');
+
+    $(function () {
+        $button.click(function () {
+            $table.bootstrapTable('selectPage', +$page.val());
+        });
+        $button2.click(function () {
+            $table.bootstrapTable('prevPage');
+        });
+        $button3.click(function () {
+            $table.bootstrapTable('nextPage');
+        });
+    });
+
+//Detali view
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+        });
+        return html.join('');
+    }
+//end
+
+
+    var API_URL = 'http://' + location.host + '/customer/add/';
+    var API_URL_EDIT = 'http://' + location.host + '/customer/edit/';
+    var API_URL_DELETE = 'http://' + location.host + '/customer/delete/';
+
+    var $table = $('#table').bootstrapTable({url: API_URL}),
+        $modal = $('#modal').modal({show: false}),
+        $modal2 = $('#modal_2').modal({show: false}),
+        $alert = $('.alert').hide();
+
+//INSERT
+
+    $(function () {
+        // create event
+        $('.create').click(function () {
+            showModal($(this).text());
+        });
+
+        $modal.find('.submit').click(function () {
+            var row = {};
+            
+            $modal.find('input[name]').each(function () {
+                row[$(this).attr('name')] = $(this).val();
+            });
+            
+            $.ajax({
+                //url: API_URL + ($modal.data('actor_id') || ''),
+                url: API_URL,
+                //url: 'http://127.0.0.1:3000/addlist',
+                type: $modal.data('actor_id') ? 'put' : 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(row),
+                success: function () {
+                    $modal.modal('hide');
+                    $table.bootstrapTable('refresh');
+                    showAlert(($modal.data('actor_id') ? 'Update' : 'Create') + ' item successful!', 'success');
+                    console.log(row);
+                },
+                error: function () {
+                    $modal.modal('hide');
+                    showAlert(($modal.data('actor_id') ? 'Update' : 'Create') + ' item error!', 'danger');
+                }
+            });
+        });
+    });
+
+//UPDATE
+        $(function () {
+        // create event
+        $('.update').click(function () {
+            showModal2($(this).text());
+        });
+
+        $modal2.find('.submit').click(function () {
+            var row = {};
+
+        $modal2.find('input[name]').each(function () {
+                row[$(this).attr('name')] = $(this).val();
+            });
+            
+            $.ajax({
+                //url: API_URL_EDIT + ($modal2.data('actor_id')),
+                url: API_URL_EDIT + $modal2.data('id'),
+                //url: 'http://127.0.0.1:3000/addlist',
+                type: $modal2.data('actor_id') ? 'put' : 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(row),
+                success: function () {
+                    $modal2.modal('hide');
+                    $table.bootstrapTable('refresh');
+                    showAlert(($modal2.data('actor_id') ? 'Update' : 'Create') + ' item successful!', 'success');
+                    console.log(row);
+                },
+                error: function () {
+                    $modal2.modal('hide');
+                    showAlert(($modal2.data('actor_id') ? 'Update' : 'Create') + ' item error!', 'danger');
+                }
+            });
+        });
+    });
+
+    function queryParams(params) {
+        return {};
+    }
+
+    function actionFormatter(value) {
+        return [
+            '<a class="update" href="javascript:" title="Update Item"><i class="glyphicon glyphicon-edit"></i></a>',
+            '<a class="remove" href="javascript:" title="Delete Item"><i class="glyphicon glyphicon-remove-circle"></i></a>',
+        ].join('');
+    }
+
+    // update and delete events
+    window.actionEvents = {
+        'click .update': function (e, value, row) {
+            showModal2($(this).attr('title'), row);
+        },
+        'click .remove': function (e, value, row) {
+            if (confirm('Are you sure to delete this item?')) {
+                $.ajax({
+                    url: API_URL_DELETE + row.actor_id,
+                    method: 'POST',
+                    //type: 'delete',
+                    //type: row.actor_id ? 'put' : 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify(row),
+                    success: function () {
+                        $table.bootstrapTable('refresh');
+                        showAlert('Delete item successful!', 'success');
+                    },
+                    error: function () {
+                        showAlert('Delete item error!', 'danger');
+                        console.log(row);
+                    }
+                })
+            }
+        }
+    };
+
+    function showModal(title, row) {
+        row = row || {
+            id: '',
+            name: '',
+            last_name: '',
+            description: '',
+            updated: ''
+        }; // default row value
+
+        $modal.data('id', row.id);
+        $modal.find('.modal-title').text(title);
+        for (var name in row) {
+            $modal.find('input[name="' + name + '"]').val(row[name]);
+        }
+        $modal.modal('show');
+
+
+    }
+
+        function showModal2(title, row) {
+        row = row || {
+            id: '',
+            name: '',
+            last_name: '',
+            last_update: '',
+            updated: ''
+        }; // default row value
+
+
+        $modal2.data('id', row.actor_id);
+        $modal2.find('.modal-title').text(title);
+        for (var name in row) {
+            $modal2.find('input[name="' + name + '"]').val(row[name]);
+        }
+        $modal2.modal('show');
+
+
+    }
+    function showAlert(title, type) {
+        $alert.attr('class', 'alert alert-' + type || 'success')
+              .html('<i class="glyphicon glyphicon-check"></i> ' + title).show();
+        setTimeout(function () {
+            $alert.hide();
+        }, 3000);
+    }
+</script>
+</body>
+</html>

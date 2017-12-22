@@ -1,0 +1,39 @@
+{
+  "name": "bootstrap_inventory",
+  "version": "1.0.0",
+  "description": "REST",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-myconnection": "^1.0.4",
+    "mysql2": "^1.5.1",
+    "mysql": "^2.15.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-myconnection": "^1.0.4",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.1",
+    "path": "^0.12.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meduzko/Custom_proj.git"
+  },
+  "keywords": [
+    "REST"
+  ],
+  "author": "Meduzko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Meduzko/Custom_proj/issues"
+  },
+  "homepage": "https://github.com/Meduzko/Custom_proj#readme"
+}
